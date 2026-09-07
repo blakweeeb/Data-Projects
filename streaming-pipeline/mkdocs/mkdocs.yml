@@ -1,0 +1,93 @@
+site_name: Streaming Pipeline Documentation
+site_description: Real-time streaming pipeline with Kafka, Spark, Flink, MinIO, Grafana, and Prometheus
+site_author: Data Engineering Team
+site_url: https://github.com/yourusername/streaming-pipeline
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+nav:
+  - Home: index.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Data Flow: architecture/data-flow.md
+      - Components: architecture/components.md
+  - Getting Started:
+      - Prerequisites: getting-started/prerequisites.md
+      - Quick Start: getting-started/quick-start.md
+      - Configuration: getting-started/configuration.md
+  - Components:
+      - Kafka Producer: components/producer.md
+      - Spark Streaming: components/spark-streaming.md
+      - Flink Job: components/flink-job.md
+      - MinIO Storage: components/minio.md
+      - PostgreSQL: components/postgresql.md
+  - Monitoring:
+      - Prometheus: monitoring/prometheus.md
+      - Grafana Dashboards: monitoring/grafana.md
+      - Alerting: monitoring/alerting.md
+  - Testing:
+      - Verification: testing/verification.md
+      - Latency Tests: testing/latency.md
+      - Load Testing: testing/load-testing.md
+  - Troubleshooting: troubleshooting.md
+  - API Reference: api-reference.md
+
+plugins:
+  - search
+  - mermaid2
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [../producer, ../spark_streaming]
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/yourusername/streaming-pipeline
+    - icon: fontawesome/brands/docker
+      link: https://hub.docker.com/
+  version:
+    provider: mike
+
+copyright: Copyright &copy; 2024 Data Engineering Team

@@ -1,0 +1,79 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'streaming-pipeline'
+    environment: 'development'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+rule_files: []
+
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Node Exporter (host metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # Kafka Exporter (consumer lag, topic metrics)
+  - job_name: 'kafka-exporter'
+    static_configs:
+      - targets: ['kafka-exporter:9308']
+
+  # Kafka JMX (broker metrics)
+  - job_name: 'kafka-jmx'
+    static_configs:
+      - targets: ['kafka:9101']
+
+  # Spark Master
+  - job_name: 'spark-master'
+    static_configs:
+      - targets: ['spark-master:8080']
+    metrics_path: '/metrics/prometheus/'
+
+  # Spark Workers
+  - job_name: 'spark-workers'
+    static_configs:
+      - targets: ['spark-worker-1:8080', 'spark-worker-2:8080']
+    metrics_path: '/metrics/prometheus/'
+
+  # Flink JobManager
+  - job_name: 'flink-jobmanager'
+    static_configs:
+      - targets: ['flink-jobmanager:8081']
+    metrics_path: '/metrics'
+
+  # Flink TaskManagers
+  - job_name: 'flink-taskmanagers'
+    static_configs:
+      - targets: ['flink-taskmanager:8081']
+    metrics_path: '/metrics'
+
+  # MinIO
+  - job_name: 'minio'
+    static_configs:
+      - targets: ['minio:9000']
+    metrics_path: '/minio/v2/metrics/cluster'
+
+  # PostgreSQL (using postgres_exporter - would need to be added)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+
+  # Grafana
+  - job_name: 'grafana'
+    static_configs:
+      - targets: ['grafana:3000']
+    metrics_path: '/metrics'
+
+# Remote write for long-term storage (optional)
+# remote_write:
+#   - url: "http://thanos:10902/api/v1/receive"
