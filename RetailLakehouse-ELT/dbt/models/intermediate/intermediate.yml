@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: int_order_lines
+    description: >
+      Linea de pedido enriquecida con cliente, categoria, vendedor y geografia.
+      Es la tabla atomica de la que salen todos los agregados.
+    columns:
+      - name: order_id
+        tests: [not_null]
+      - name: product_id
+        tests: [not_null]
+      - name: line_total
+        description: price + freight_value de la linea.
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: int_order_payments_agg
+    description: Pagos consolidados a nivel de pedido (importe, cuotas y metodos).
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: payment_value
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: int_order_reviews_agg
+    description: Satisfaccion media por pedido.
+    columns:
+      - name: order_id
+        tests: [unique, not_null]
+      - name: avg_review_score
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 5

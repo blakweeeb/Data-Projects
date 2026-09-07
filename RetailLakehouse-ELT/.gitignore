@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Airflow
+logs/
+airflow.cfg
+airflow.db
+standalone_admin_password.txt
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+dbt/.user.yml
+
+# Datos (se generan con `make gen-data`; son ~12 MB)
+data/raw/*.csv
+!data/raw/.gitkeep
+
+# Driver JDBC del Hive Metastore (descargar: https://jdbc.postgresql.org/download/postgresql-42.7.3.jar)
+config/hive/lib/*.jar
+
+# Entorno
+.env
+
+# OS
+.DS_Store
+Thumbs.db

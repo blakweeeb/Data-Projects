@@ -1,0 +1,18 @@
+# Perfil de conexion de dbt.
+#   * dentro de Docker  -> TRINO_HOST=trino, TRINO_PORT=8080
+#   * desde el host     -> TRINO_HOST=localhost, TRINO_PORT=8082 (puerto mapeado)
+retail_lakehouse:
+  target: dev
+  outputs:
+    dev:
+      type: trino
+      host: "{{ env_var('TRINO_HOST', 'localhost') }}"
+      port: "{{ env_var('TRINO_PORT', '8080') | int }}"
+      user: "{{ env_var('TRINO_USER', 'dbt') }}"
+      catalog: hive
+      schema: lakehouse
+      threads: 1
+      http_scheme: http
+      session_properties:
+        query_max_run_time: 30m
+        join_distribution_type: BROADCAST

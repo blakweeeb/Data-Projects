@@ -1,0 +1,31 @@
+version: 2
+
+sources:
+  - name: raw
+    description: >
+      Tablas externas registradas en el Hive Metastore que apuntan al Parquet
+      escrito por Spark en `s3a://lake/raw/`.
+    database: hive
+    schema: raw
+    tables:
+      - name: orders
+        description: Pedidos (cabecera). Particionado por order_year/order_month.
+        columns:
+          - name: order_id
+            tests: [unique, not_null]
+          - name: customer_id
+            tests: [not_null]
+      - name: order_items
+        description: Lineas de pedido (producto + vendedor + precio + flete).
+      - name: order_payments
+        description: Pagos asociados al pedido (puede haber varios por pedido).
+      - name: order_reviews
+        description: Reseñas y puntuacion de satisfaccion (1-5).
+      - name: customers
+        description: Maestro de clientes (una fila por pedido en el origen).
+      - name: products
+        description: Maestro de productos.
+      - name: sellers
+        description: Maestro de vendedores.
+      - name: geolocation
+        description: Tabla de referencia geografica por codigo postal.

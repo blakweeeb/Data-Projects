@@ -1,0 +1,9 @@
+# Normaliza los fines de linea: el repo siempre guarda LF.
+# Evita que un checkout en Windows rompa scripts dentro de los contenedores Linux.
+* text=auto eol=lf
+
+# Los datos de muestra se generan con `make gen-data`; no hace falta versionarlos
+*.csv text eol=lf
+*.parquet binary
+*.png binary
+*.jpg binary

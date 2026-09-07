@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      Hecho de pedidos (1 fila por pedido) con importes, pagos, entregas y
+      satisfaccion. Es la tabla que consumen los dashboards.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_id]
+    columns:
+      - name: order_id
+        description: PK del pedido.
+        tests: [unique, not_null]
+      - name: customer_unique_id
+        tests: [not_null]
+      - name: order_value
+        description: Suma de productos + flete del pedido.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: item_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+      - name: order_status
+        tests:
+          - accepted_values:
+              values: ['delivered', 'shipped', 'canceled', 'unavailable', 'invoiced',
+                       'processing', 'created', 'approved']
+      - name: order_month_start
+        tests: [not_null]
+      - name: avg_review_score
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 5
+
+  - name: dim_customers
+    description: >
+      Dimension de clientes con metricas de ciclo de vida.
+      Grano: 1 fila por `customer_unique_id` (persona), no por `customer_id`
+      (que en Olist es una clave por pedido y duplicaria las metricas).
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [customer_unique_id]
+    columns:
+      - name: customer_unique_id
+        description: PK de la dimension (persona).
+        tests: [unique, not_null]
+      - name: order_identities
+        description: Cuantos `customer_id` distintos tiene la persona (= pedidos).
+      - name: lifetime_value
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: value_segment
+        tests:
+          - accepted_values:
+              values: ['alto valor', 'valor medio', 'valor bajo', 'sin compras']
+
+  - name: dim_products
+    description: Dimension de productos con rendimiento comercial.
+    columns:
+      - name: product_id
+        tests: [unique, not_null]
+      - name: product_category_name_english
+        tests: [not_null]
+      - name: units_sold
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: product_performance_segment
+        tests:
+          - accepted_values:
+              values: ['top', 'medio', 'cola larga', 'sin ventas']
+
+  - name: agg_sales_monthly
+    description: KPIs mensuales (ingreso, ticket medio, entregas, MoM).
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [order_month_start]
+    columns:
+      - name: order_month_start
+        tests: [unique, not_null]
+      - name: revenue
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: delivered_pct
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+
+  - name: agg_category_monthly
+    description: Ingreso mensual por categoria con ranking y cuota de mercado.
+    columns:
+      - name: order_month_start
+        tests: [not_null]
+      - name: category
+        tests: [not_null]
+      - name: revenue
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+
+  - name: customer_retention_cohorts
+    description: Retencion mensual por cohorte de alta del cliente.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [cohort_month, month_index]
+    columns:
+      - name: cohort_month
+        tests: [not_null]
+      - name: month_index
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      - name: retention_pct
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100

@@ -1,0 +1,45 @@
+name: retail_lakehouse
+version: "1.0.0"
+config-version: 2
+
+profile: retail_lakehouse
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+analysis-paths: ["analyses"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Las dependencias (dbt_utils) viven fuera del directorio montado para que el
+# bind-mount de ./dbt no las elimine en tiempo de ejecucion.
+packages-install-path: "/opt/airflow/dbt_packages"
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+require-dbt-version: [">=1.8.0", "<1.10.0"]
+
+vars:
+  # Fecha minima del dataset; se usa para acotar modelos incrementales.
+  start_date: "2016-01-01"
+  # Estados considerados "venta valida" para los marts financieros.
+  valid_order_statuses: ["delivered", "shipped", "invoiced", "processing", "created", "approved"]
+
+models:
+  retail_lakehouse:
+    staging:
+      +materialized: view
+      +schema: staging
+    intermediate:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: lakehouse
+
+seeds:
+  retail_lakehouse:
+    +schema: staging
+    +quote_columns: false

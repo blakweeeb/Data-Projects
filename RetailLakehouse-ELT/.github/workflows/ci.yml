@@ -1,0 +1,70 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  tests:
+    name: Tests unitarios
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade pip pytest
+      - run: python -m pytest tests/ -v
+
+  dbt:
+    name: Validacion del proyecto dbt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar dbt-trino
+        run: python -m pip install "dbt-core>=1.8,<1.9" "dbt-trino>=1.8,<1.9"
+      - name: Instalar dependencias (dbt_utils)
+        working-directory: dbt
+        env:
+          DBT_PACKAGES_INSTALL_PATH: dbt_packages
+        run: dbt deps
+      - name: Parsear el proyecto (detecta SQL y YAML invalidos)
+        working-directory: dbt
+        env:
+          DBT_PACKAGES_INSTALL_PATH: dbt_packages
+        run: dbt parse --profiles-dir .
+
+  lint:
+    name: Sintaxis Python y YAML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install pyyaml
+      - name: Compilar scripts Python
+        run: python -m compileall extract spark/jobs scripts dags tests
+      - name: Validar YAML (docker-compose y configs)
+        run: |
+          python - <<'PY'
+          import sys, yaml
+          from pathlib import Path
+          # profiles.yml lleva Jinja ({{ env_var(...) }}): lo valida dbt, no yaml.safe_load
+          EXCLUIDOS = {Path("dbt") / "profiles.yml"}
+          ok = True
+          for p in sorted(Path(".").rglob("*.yml")):
+              if "target" in p.parts or "node_modules" in p.parts or p in EXCLUIDOS:
+                  continue
+              try:
+                  yaml.safe_load(p.read_text(encoding="utf-8"))
+                  print(f"OK   {p}")
+              except Exception as exc:
+                  ok = False
+                  print(f"FAIL {p}: {exc}")
+          sys.exit(0 if ok else 1)
+          PY
