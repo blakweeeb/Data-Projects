@@ -1,0 +1,70 @@
+version: "3.8"
+
+# Orquestación local (sin costo) del pipeline ETL + Data Warehouse.
+# Airflow ejecuta el DAG; Postgres 'warehouse' hace de Redshift stand-in.
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+
+  warehouse:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: warehouse
+      POSTGRES_PASSWORD: warehouse
+      POSTGRES_DB: warehouse
+    ports:
+      - "5433:5432"   # externo 5433 -> interno 5432
+
+  webserver:
+    image: apache/airflow:2.9.0
+    depends_on:
+      - postgres
+      - warehouse
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      _AIRFLOW_DB_MIGRATE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true"
+      _AIRFLOW_WWW_USER_USERNAME: admin
+      _AIRFLOW_WWW_USER_PASSWORD: admin
+      # Conexión al warehouse (dentro de la red docker el host es 'warehouse')
+      WAREHOUSE_HOST: warehouse
+      WAREHOUSE_PORT: "5432"
+      WAREHOUSE_USER: warehouse
+      WAREHOUSE_PASSWORD: warehouse
+      WAREHOUSE_DB: warehouse
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./data:/opt/airflow/data
+      - ./requirements.txt:/requirements.txt
+    ports:
+      - "8080:8080"
+    command: webserver
+
+  scheduler:
+    image: apache/airflow:2.9.0
+    depends_on:
+      - postgres
+      - warehouse
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      _AIRFLOW_DB_MIGRATE: "true"
+      WAREHOUSE_HOST: warehouse
+      WAREHOUSE_PORT: "5432"
+      WAREHOUSE_USER: warehouse
+      WAREHOUSE_PASSWORD: warehouse
+      WAREHOUSE_DB: warehouse
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/airflow/src
+      - ./data:/opt/airflow/data
+      - ./requirements.txt:/requirements.txt
+    command: scheduler
