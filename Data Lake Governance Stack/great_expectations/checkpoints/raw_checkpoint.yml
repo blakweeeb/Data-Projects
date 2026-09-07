@@ -1,0 +1,22 @@
+# Great Expectations Checkpoint - Raw Data Validation
+# Validates data in 01_raw/ after ingestion
+
+name: raw_checkpoint
+config_version: 1.0
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S-raw-validation"
+expectation_suite_name: null  # Will be overridden per batch
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: store_evaluation_params
+    action:
+      class_name: StoreEvaluationParametersAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction
+      site_names: [local_site]
+
+# Batch definitions will be added dynamically by the checkpoint runner
+# based on the raw datasource

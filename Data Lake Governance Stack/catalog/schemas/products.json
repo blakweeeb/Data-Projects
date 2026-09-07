@@ -1,0 +1,49 @@
+{
+  "fields": [
+    {
+      "name": "product_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "product_category_name",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "product_name_lenght",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "product_description_lenght",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "product_photos_qty",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "product_weight_g",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "product_length_cm",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "product_height_cm",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "product_width_cm",
+      "type": "double",
+      "nullable": true
+    }
+  ]
+}

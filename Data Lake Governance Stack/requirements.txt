@@ -1,0 +1,29 @@
+# Core data processing
+pandas>=2.1.0
+pyarrow>=14.0.0
+duckdb>=0.9.0
+duckdb-engine>=0.10.0
+
+# Data quality
+gx>=0.18.0
+
+# Data ingestion
+kagglehub>=0.3.0
+
+# Visualization
+apache-superset>=3.0.0
+
+# Database
+psycopg2-binary>=2.9.0
+sqlalchemy>=2.0.0
+
+# Config
+pyyaml>=6.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Utils
+python-dotenv>=1.0.0
+tqdm>=4.66.0

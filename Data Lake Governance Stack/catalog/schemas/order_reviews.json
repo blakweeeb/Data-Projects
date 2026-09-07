@@ -1,0 +1,39 @@
+{
+  "fields": [
+    {
+      "name": "review_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "order_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "review_score",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "review_comment_title",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "review_comment_message",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "review_creation_date",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "review_answer_timestamp",
+      "type": "large_string",
+      "nullable": true
+    }
+  ]
+}

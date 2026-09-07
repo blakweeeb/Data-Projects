@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "name": "order_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "payment_sequential",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "payment_type",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "payment_installments",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "payment_value",
+      "type": "double",
+      "nullable": true
+    }
+  ]
+}

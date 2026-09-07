@@ -1,0 +1,22 @@
+# Great Expectations Checkpoint - Curated Data Validation
+# Validates data in 02_curated/ after transformation
+
+name: curated_checkpoint
+config_version: 1.0
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S-curated-validation"
+expectation_suite_name: null  # Will be overridden per batch
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: store_evaluation_params
+    action:
+      class_name: StoreEvaluationParametersAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction
+      site_names: [local_site]
+
+# Batch definitions will be added dynamically by the checkpoint runner
+# based on the curated datasource

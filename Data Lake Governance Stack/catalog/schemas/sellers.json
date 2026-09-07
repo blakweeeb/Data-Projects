@@ -1,0 +1,24 @@
+{
+  "fields": [
+    {
+      "name": "seller_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "seller_zip_code_prefix",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "seller_city",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "seller_state",
+      "type": "large_string",
+      "nullable": true
+    }
+  ]
+}

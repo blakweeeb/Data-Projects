@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "name": "geolocation_zip_code_prefix",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "geolocation_lat",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "geolocation_lng",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "geolocation_city",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "geolocation_state",
+      "type": "large_string",
+      "nullable": true
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  superset-db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: superset
+      POSTGRES_USER: superset
+      POSTGRES_PASSWORD: superset
+    volumes:
+      - superset-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U superset"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  superset:
+    image: apache/superset:latest
+    depends_on:
+      superset-db:
+        condition: service_healthy
+    environment:
+      SUPERSET_SECRET_KEY: "change-this-secret-key-in-production"
+      SQLALCHEMY_DATABASE_URI: postgresql://superset:superset@superset-db:5432/superset
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./superset_home:/app/superset_home
+    command: >
+      bash -c "superset db upgrade &&
+               superset fab create-admin --username admin --password admin --email admin@local --firstname Admin --lastname User &&
+               superset init &&
+               superset run -h 0.0.0.0 -p 8088 --with-threads --reload --debugger"
+
+volumes:
+  superset-db-volume:
+  superset_home:

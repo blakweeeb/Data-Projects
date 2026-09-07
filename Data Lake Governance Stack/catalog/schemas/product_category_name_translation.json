@@ -1,0 +1,14 @@
+{
+  "fields": [
+    {
+      "name": "product_category_name",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "product_category_name_english",
+      "type": "large_string",
+      "nullable": true
+    }
+  ]
+}

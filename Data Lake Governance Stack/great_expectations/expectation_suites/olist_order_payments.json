@@ -1,0 +1,46 @@
+{
+  "expectation_suite_name": "olist_order_payments",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_ordered_list",
+      "kwargs": {
+        "column_list": ["order_id", "payment_sequential", "payment_type", "payment_installments", "payment_value"]
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "order_id"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "payment_sequential"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "payment_type",
+        "value_set": ["credit_card", "boleto", "voucher", "debit_card", "not_defined"]
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "payment_installments",
+        "min_value": 1,
+        "max_value": 24
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "payment_value",
+        "min_value": 0,
+        "max_value": 15000
+      }
+    }
+  ]
+}

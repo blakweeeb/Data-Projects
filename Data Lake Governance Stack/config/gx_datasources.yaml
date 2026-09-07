@@ -1,0 +1,29 @@
+# Great Expectations Datasources Configuration
+# This is referenced by the GX init script
+
+datasources:
+  raw_filesystem:
+    class_name: Datasource
+    execution_engine:
+      class_name: PandasExecutionEngine
+    data_connectors:
+      raw_inferred:
+        class_name: InferredAssetFilesystemDataConnector
+        base_directory: ../data_lake/01_raw
+        default_regex:
+          pattern: (.*)/year=(\d{4})/month=(\d{2})/(.*)\.parquet
+          group_names: [entity, year, month, filename]
+        glob_directive: "**/*.parquet"
+
+  curated_filesystem:
+    class_name: Datasource
+    execution_engine:
+      class_name: PandasExecutionEngine
+    data_connectors:
+      curated_inferred:
+        class_name: InferredAssetFilesystemDataConnector
+        base_directory: ../data_lake/02_curated
+        default_regex:
+          pattern: (.*)\.parquet
+          group_names: [entity]
+        glob_directive: "*.parquet"

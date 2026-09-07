@@ -1,0 +1,54 @@
+# Data Lake Governance Stack - Configuration
+
+# Base paths
+paths:
+  base: "data_lake"
+  landing: "data_lake/00_landing"
+  raw: "data_lake/01_raw"
+  curated: "data_lake/02_curated"
+  serving: "data_lake/03_serving"
+  catalog: "catalog/schemas"
+  gx_config: "great_expectations"
+  gx_data_docs: "great_expectations/uncommitted/data_docs"
+
+# Partitioning strategy
+partitioning:
+  strategy: "date"
+  date_columns:
+    orders: "order_purchase_timestamp"
+    order_items: "shipping_limit_date"
+    payments: "payment_installments"
+  format: "year=%Y/month=%m"
+
+# Olist dataset tables
+olist_tables:
+  - customers
+  - geolocation
+  - order_items
+  - order_payments
+  - order_reviews
+  - orders
+  - products
+  - sellers
+  - product_category_name_translation
+
+# DuckDB serving database
+duckdb:
+  path: "data_lake/03_serving/serving.duckdb"
+  schema: "main"
+
+# Superset configuration
+superset:
+  host: "localhost"
+  port: 8088
+  username: "admin"
+  password: "admin"
+  database_name: "Data Lake Governance"
+  sqlalchemy_uri: "duckdb:///data_lake/03_serving/serving.duckdb"
+
+# Great Expectations
+gx:
+  datasource_raw: "raw_filesystem"
+  datasource_curated: "curated_filesystem"
+  checkpoint_raw: "raw_checkpoint"
+  checkpoint_curated: "curated_checkpoint"

@@ -1,0 +1,56 @@
+# Data Lake Governance Stack - Git ignore
+# Archivos generados o sensibles que no deben versionarse
+
+# Directories de datos (generados al correr make all)
+data_lake/00_landing/
+data_lake/01_raw/
+data_lake/02_curated/
+data_lake/03_serving/
+
+# Great Expectations generated files
+great_expectations/uncommitted/
+
+# Superset home (metadatos, logs, sesiones)
+superset_home/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+*.env.local
+
+# Logs
+*.log
+logs/
+
+# Parquet/Arrow temp files
+*.parquet.tmp
+*.arrow.tmp
+
+# Docker
+docker-compose.yml.last
+
+# Great Expectations config override
+great_expectations/uncommitted/data_docs_custom_styles.css
+great_expectations/uncommitted/data_docs_template/
+great_expectations/uncommitted/gx_usage_stats_v1.json

@@ -1,0 +1,49 @@
+{
+  "fields": [
+    {
+      "name": "order_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "order_item_id",
+      "type": "int64",
+      "nullable": true
+    },
+    {
+      "name": "product_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "seller_id",
+      "type": "large_string",
+      "nullable": true
+    },
+    {
+      "name": "shipping_limit_date",
+      "type": "timestamp[us]",
+      "nullable": true
+    },
+    {
+      "name": "price",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "freight_value",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "year",
+      "type": "int32",
+      "nullable": true
+    },
+    {
+      "name": "month",
+      "type": "int32",
+      "nullable": true
+    }
+  ]
+}
